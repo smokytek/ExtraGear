@@ -1,6 +1,7 @@
 name: ExtraGear
 version: ${project.version}
 author: TheBusyBiscuit
+description: Equipaggiamento aggiuntivo per Slimefun, completamente tradotto in italiano
 depend: [Slimefun]
 
 api-version: 1.14

@@ -84,7 +84,8 @@ public class ExtraGear extends JavaPlugin implements SlimefunAddon {
     }
 
     private void registerSword(Material type, String component, ItemStack item, List<Pair<Enchantment, Integer>> enchantments) {
-        SlimefunItemStack is = new SlimefunItemStack(component + "_SWORD", type, "&r" + ChatUtils.humanize(component) + " Sword");
+        String italianComponent = getItalianComponent(component);
+        SlimefunItemStack is = new SlimefunItemStack(component + "_SWORD", type, "&rSpada di " + italianComponent);
 
         for (Pair<Enchantment, Integer> enchantment : enchantments) {
             is.addUnsafeEnchantment(enchantment.getFirstValue(), enchantment.getSecondValue());
@@ -95,17 +96,17 @@ public class ExtraGear extends JavaPlugin implements SlimefunAddon {
 
         researchId++;
 
-        Research research = new Research(new NamespacedKey(this, component.toLowerCase() + "_sword"), researchId, ChatUtils.humanize(component) + " Sword", 3);
+        Research research = new Research(new NamespacedKey(this, component.toLowerCase() + "_sword"), researchId, "Spada di " + italianComponent, 3);
         research.addItems(slimefunItem);
         research.register();
     }
 
     private void registerArmor(ArmorSet armorset, String component, ItemStack item, List<Pair<Enchantment, Integer>> enchantments) {
-        String humanizedComponent = ChatUtils.humanize(component);
-        SlimefunItemStack[] armor = { new SlimefunItemStack(component + "_HELMET", armorset.getHelmet(), "&f" + humanizedComponent + " Helmet"),
-                new SlimefunItemStack(component + "_CHESTPLATE", armorset.getChestplate(), "&f" + humanizedComponent + " Chestplate"),
-                new SlimefunItemStack(component + "_LEGGINGS", armorset.getLeggings(), "&f" + humanizedComponent + " Leggings"),
-                new SlimefunItemStack(component + "_BOOTS", armorset.getBoots(), "&f" + humanizedComponent + " Boots") };
+        String italianComponent = getItalianComponent(component);
+        SlimefunItemStack[] armor = { new SlimefunItemStack(component + "_HELMET", armorset.getHelmet(), "&fElmo di " + italianComponent),
+                new SlimefunItemStack(component + "_CHESTPLATE", armorset.getChestplate(), "&fCorazza di " + italianComponent),
+                new SlimefunItemStack(component + "_LEGGINGS", armorset.getLeggings(), "&fGambali di " + italianComponent),
+                new SlimefunItemStack(component + "_BOOTS", armorset.getBoots(), "&fStivali di " + italianComponent) };
 
         for (Pair<Enchantment, Integer> enchantment : enchantments) {
             for (ItemStack is : armor) {
@@ -127,9 +128,38 @@ public class ExtraGear extends JavaPlugin implements SlimefunAddon {
 
         researchId++;
 
-        Research research = new Research(new NamespacedKey(this, component.toLowerCase() + "_armor"), researchId, humanizedComponent + " Armor", 5);
+        Research research = new Research(new NamespacedKey(this, component.toLowerCase() + "_armor"), researchId, "Armatura di " + italianComponent, 5);
         research.addItems(helmet, chestplate, leggings, boots);
         research.register();
+    }
+
+    private String getItalianComponent(String component) {
+        switch (component) {
+            case "COPPER": return "Rame";
+            case "TIN": return "Stagno";
+            case "SILVER": return "Argento";
+            case "ALUMINUM": return "Alluminio";
+            case "LEAD": return "Piombo";
+            case "ZINC": return "Zinco";
+            case "MAGNESIUM": return "Magnesio";
+            case "STEEL": return "Acciaio";
+            case "BRONZE": return "Bronzo";
+            case "DURALUMIN": return "Duralluminio";
+            case "BILLON": return "Billon";
+            case "BRASS": return "Ottone";
+            case "ALUMINUM_BRASS": return "Ottone d'Alluminio";
+            case "ALUMINUM_BRONZE": return "Bronzo d'Alluminio";
+            case "CORINTHIAN_BRONZE": return "Bronzo Corinzio";
+            case "SOLDER": return "Lega per Saldatura";
+            case "DAMASCUS_STEEL": return "Acciaio di Damasco";
+            case "HARDENED": return "Metallo Indurito";
+            case "REINFORCED": return "Lega Rinforzata";
+            case "FERROSILICON": return "Ferrosilicio";
+            case "GILDED_IRON": return "Ferro Dorato";
+            case "NICKEL": return "Nichel";
+            case "COBALT": return "Cobalto";
+            default: return ChatUtils.humanize(component);
+        }
     }
 
     @Override

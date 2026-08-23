@@ -1,4 +1,8 @@
-# ExtraGear
+# ExtraGear Italiano
+
+Fork italiana di ExtraGear per Slimefun. Tutte le spade, le armature e le ricerche sono tradotte direttamente nel plugin, senza richiedere SlimefunTranslation.
+
+Gli ID interni degli item sono invariati, quindi la versione resta compatibile con mondi e configurazioni esistenti.
 ExtraGear is one of the oldest Slimefun addons in existence.<br>
 The features are pretty simple, it adds new weapons and armor sets for various Slimefun ingots/alloys.
 These weapons and armor sets also come with enchantments!
