@@ -2,11 +2,14 @@ package io.github.thebusybiscuit.extragear;
 
 import java.util.Arrays;
 import java.util.List;
+import java.io.File;
 
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -27,6 +30,7 @@ public class ExtraGear extends JavaPlugin implements SlimefunAddon {
 
     private int researchId = 3300;
     private ItemGroup itemGroup;
+    private FileConfiguration itemNames;
 
     @Override
     public void onEnable() {
@@ -37,6 +41,9 @@ public class ExtraGear extends JavaPlugin implements SlimefunAddon {
         }
 
         new Metrics(this, 6469);
+
+        saveResource("item-names.yml", false);
+        itemNames = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "item-names.yml"));
 
         itemGroup = new ItemGroup(new NamespacedKey(this, "items"), new CustomItemStack(Material.DIAMOND_SWORD, "&6ExtraGear"), 1);
 
@@ -85,7 +92,8 @@ public class ExtraGear extends JavaPlugin implements SlimefunAddon {
 
     private void registerSword(Material type, String component, ItemStack item, List<Pair<Enchantment, Integer>> enchantments) {
         String italianComponent = getItalianComponent(component);
-        SlimefunItemStack is = new SlimefunItemStack(component + "_SWORD", type, "&rSpada di " + italianComponent);
+        String itemId = component + "_SWORD";
+        SlimefunItemStack is = new SlimefunItemStack(itemId, type, getItemName(itemId, "&rSpada di " + italianComponent));
 
         for (Pair<Enchantment, Integer> enchantment : enchantments) {
             is.addUnsafeEnchantment(enchantment.getFirstValue(), enchantment.getSecondValue());
@@ -103,10 +111,10 @@ public class ExtraGear extends JavaPlugin implements SlimefunAddon {
 
     private void registerArmor(ArmorSet armorset, String component, ItemStack item, List<Pair<Enchantment, Integer>> enchantments) {
         String italianComponent = getItalianComponent(component);
-        SlimefunItemStack[] armor = { new SlimefunItemStack(component + "_HELMET", armorset.getHelmet(), "&fElmo di " + italianComponent),
-                new SlimefunItemStack(component + "_CHESTPLATE", armorset.getChestplate(), "&fCorazza di " + italianComponent),
-                new SlimefunItemStack(component + "_LEGGINGS", armorset.getLeggings(), "&fGambali di " + italianComponent),
-                new SlimefunItemStack(component + "_BOOTS", armorset.getBoots(), "&fStivali di " + italianComponent) };
+        SlimefunItemStack[] armor = { new SlimefunItemStack(component + "_HELMET", armorset.getHelmet(), getItemName(component + "_HELMET", "&fElmo di " + italianComponent)),
+                new SlimefunItemStack(component + "_CHESTPLATE", armorset.getChestplate(), getItemName(component + "_CHESTPLATE", "&fCorazza di " + italianComponent)),
+                new SlimefunItemStack(component + "_LEGGINGS", armorset.getLeggings(), getItemName(component + "_LEGGINGS", "&fGambali di " + italianComponent)),
+                new SlimefunItemStack(component + "_BOOTS", armorset.getBoots(), getItemName(component + "_BOOTS", "&fStivali di " + italianComponent)) };
 
         for (Pair<Enchantment, Integer> enchantment : enchantments) {
             for (ItemStack is : armor) {
@@ -160,6 +168,10 @@ public class ExtraGear extends JavaPlugin implements SlimefunAddon {
             case "COBALT": return "Cobalto";
             default: return ChatUtils.humanize(component);
         }
+    }
+
+    private String getItemName(String itemId, String fallback) {
+        return itemNames.getString("items." + itemId, fallback);
     }
 
     @Override
